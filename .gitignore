@@ -1,0 +1,10 @@
+.idea
+.ipynb_checkpoints
+odi_Data
+dataset_1v.pkl
+dataset_2v.pkl
+dataset_1ver.pkl
+dataset_2ver.pkl
+dataset_3ver.pkl
+dataset_4ver.pkl
+Dataset(pkl)

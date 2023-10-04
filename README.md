@@ -8,7 +8,6 @@ Welcome to the World Cup Score Predictor App repository! This interactive web ap
 - [Demo](#demo)
 - [Features](#features)
 - [Technologies Used](#technologies-used)
-- [License](#license)
 
 ## About
 
@@ -35,7 +34,5 @@ You can access a live demo of the app [here](https://world-cup-predictor-app-wol
 - Streamlit (for the web application)
 - HTML/CSS (for UI enhancements)
 
-## License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 

@@ -308,9 +308,12 @@ col1, col2 = st.columns(2)
 with col1:
     st.markdown("<h3 style='margin: 0; padding: 0;''>Select batting team</h3>", unsafe_allow_html=True)
     batting_team = st.selectbox('', sorted(teams))
+
+available_bowling_teams = sorted([team for team in teams if team != batting_team])
+
 with col2:
     st.markdown("<h3 style='margin: 0; padding: 0;''>Select bowling team</h3>", unsafe_allow_html=True)
-    bowling_team = st.selectbox('', sorted(teams), key='bowling')
+    bowling_team = st.selectbox('', sorted(available_bowling_teams), key='bowling')
 
 
 col3, col4 = st.columns(2)
@@ -329,10 +332,10 @@ col5, col6 = st.columns(2)
 
 with col5:
     st.markdown("<h3 style='margin: 0; padding: 0;''>Current Score</h3>", unsafe_allow_html=True)
-    current_score = st.number_input("", key='Current_score')
+    current_score = st.number_input("", key='Current_score', value=0, step=1, format='%d')
 with col6:
     st.markdown("<h3 style='margin: 0; padding: 0;''>Target</h3>", unsafe_allow_html=True)
-    target = st.number_input('', key='target')
+    target = st.number_input('', key='target', value=0, step=1, format='%d')
 
 col7, col8 = st.columns(2)
 
@@ -341,27 +344,30 @@ with col7:
     overs = st.number_input('', key='Over_done')
 with col8:
     st.markdown("<h3 style='margin: 0; padding: 0;''>Wickets Fall</h3>", unsafe_allow_html=True)
-    wickets = st.number_input('', key='wicket')
+    wickets = st.number_input('', key='wicket', value=0, step=1, format='%d')
 
 if st.button('Predict Probability'):
     runs_left = target - current_score
     balls_left = 300 - (overs*6)
     wickets = 10 - wickets
-    crr = current_score/overs
-    rrr = (runs_left*6)/balls_left
+    if overs <= 10 or overs >= 50:
+        st.error('Error: Overs should be greater than 10')
+    else:
+        crr = current_score/overs
+        rrr = (runs_left*6)/balls_left
 
-    input_df = pd.DataFrame({'batting_team': [batting_team], 'bowling_team': [bowling_team], 'city': [selected_city],
-                             'runs_left': [runs_left], 'balls_left': [balls_left], 'wickets_left': [wickets],
-                             'target': [target], 'crr': [crr], 'rrr': [rrr], 'venue': [selected_stadium]})
+        input_df = pd.DataFrame({'batting_team': [batting_team], 'bowling_team': [bowling_team], 'city': [selected_city],
+                                 'runs_left': [runs_left], 'balls_left': [balls_left], 'wickets_left': [wickets],
+                                 'target': [target], 'crr': [crr], 'rrr': [rrr], 'venue': [selected_stadium]})
 
-    result = pipe2.predict_proba(input_df)
-    loss = result[0][0]
-    win = result[0][1]
-    st.markdown(
-        f'<div style="color: white; padding: 5px; border-radius: 5px; text-align: center;">'
-        f'<h2>Predicted Probability</h2>'
-        f'<h1>{batting_team + "- " + str(round(win*100)) + "%"}</h1>'
-        f'<h1>{bowling_team + "- " + str(round(loss*100)) + "%"}</h1>'
-        f'</div>',
-        unsafe_allow_html=True
-    )
+        result = pipe2.predict_proba(input_df)
+        loss = result[0][0]
+        win = result[0][1]
+        st.markdown(
+            f'<div style="color: white; padding: 5px; border-radius: 5px; text-align: center;">'
+            f'<h2>Predicted Probability</h2>'
+            f'<h1>{batting_team + "- " + str(round(win*100)) + "%"}</h1>'
+            f'<h1>{bowling_team + "- " + str(round(loss*100)) + "%"}</h1>'
+            f'</div>',
+            unsafe_allow_html=True
+        )

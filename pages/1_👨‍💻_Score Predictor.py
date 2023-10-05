@@ -312,9 +312,12 @@ col1, col2 = st.columns(2)
 with col1:
     st.markdown("<h3 style='margin: 0; padding: 0;''>Select batting team</h3>", unsafe_allow_html=True)
     batting_team = st.selectbox('', sorted(teams))
+
+available_bowling_teams = sorted([team for team in teams if team != batting_team])
+
 with col2:
     st.markdown("<h3 style='margin: 0; padding: 0;''>Select bowling team</h3>", unsafe_allow_html=True)
-    bowling_team = st.selectbox('', sorted(teams), key='bowling')
+    bowling_team = st.selectbox('', sorted(available_bowling_teams), key='bowling')
 
 st.markdown("<h3 style='margin: 0; padding: 0;''>Select City</h3>", unsafe_allow_html=True)
 selected_city = st.selectbox('', sorted(cities))
@@ -323,7 +326,7 @@ col3, col4 = st.columns(2)
 
 with col3:
     st.markdown("<h3 style='margin: 0; padding: 0;''>Current Score</h3>", unsafe_allow_html=True)
-    current_score = st.number_input("", key='Current_score')
+    current_score = st.number_input("", key='Current_score', value=0, step=1, format='%d')
 with col4:
     st.markdown("<h3 style='margin: 0; padding: 0;''>Overs done (overs > 10)</h3>", unsafe_allow_html=True)
     overs = st.number_input('', key='Over_done')
@@ -331,7 +334,7 @@ with col4:
 col4, col5 = st.columns(2)
 with col4:
     st.markdown("<h3 style='margin: 0; padding: 0;''>Wicket Fall</h3>", unsafe_allow_html=True)
-    wicket = st.number_input('')
+    wicket = st.number_input('', value=0, step=1, format='%d')
 with col5:
     # Check if the user selected a city
     if selected_city:
@@ -341,7 +344,7 @@ with col5:
         st.info('Please select a city first.')
 
 st.markdown("<h3 style='margin: 0; padding: 0;''>Runs Score in Last 10 Overs</h3>", unsafe_allow_html=True)
-last_ten = st.number_input('', key='Runs Score in Last 10 Overs')
+last_ten = st.number_input('', key='Runs Score in Last 10 Overs', value=0, step=1, format='%d')
 
 if selected_city == 'Lucknow':
     selected_city = 'Kanpur'
@@ -352,8 +355,8 @@ if st.button('Predict'):
     if current_score < last_ten:
         st.error("Error: Current score cannot be less than runs scored in the last 5 overs.")
     elif overs <= 10:
-        st.error("Error: Overs should be greater than 5.")
-    elif wicket < 0 or wicket > 10:
+        st.error("Error: Overs should be greater than 10.")
+    elif wicket < 0 or wicket >= 10:
         st.error("Error: Number of wickets should be between 0 and 10.")
     else:
         ball_left = 300 - overs * 6

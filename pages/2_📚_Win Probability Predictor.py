@@ -252,7 +252,7 @@ city_stadium_mapping = {
     'Hamilton': ['Seddon Park'],
     'Harare': ['Harare Sports Club'],
     'Hobart': ['Bellerive Oval'],
-    'Hyderabad': ['Rajiv Gandhi International Cricket Stadium, Uppal'],
+    'Hyderabad': ['Rajiv Gandhi International Stadium, Uppal'],
     'Indore': ['Holkar Cricket Stadium'],
     'Jaipur': ['Sawai Mansingh Stadium'],
     'Jamaica': ['Sabina Park, Kingston'],
